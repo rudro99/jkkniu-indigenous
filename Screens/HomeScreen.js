@@ -11,6 +11,7 @@ import React from "react";
 import { useState } from "react";
 import { Image } from "@rneui/base";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { NavigationContainer } from "@react-navigation/native";
 const images = [
   require("../assets/ind.jpg"),
   require("../assets/ind1.jpg"),
@@ -18,7 +19,8 @@ const images = [
 ];
 const Width = Dimensions.get("window").width;
 const Height = Dimensions.get("window").height;
-const HomeScreen = () => {
+
+const HomeScreen = ({ navigation }) => {
   const [imgactive, setimgactive] = useState(0);
   onChange = (nativeEvent) => {
     if (nativeEvent) {
@@ -87,7 +89,10 @@ const HomeScreen = () => {
 
       <View style={styles.card}>
         <View style={{ flexDirection: "column" }}>
-          <TouchableOpacity onPress={() => {}} style={styles.item}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Student")}
+            style={styles.item}
+          >
             <View style={styles.button}>
               <Image
                 source={require("../assets/user.png")}
@@ -107,7 +112,12 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </View>
         <View style={{ flexDirection: "column" }}>
-          <TouchableOpacity onPress={() => {}} style={styles.item}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Blood");
+            }}
+            style={styles.item}
+          >
             <View style={styles.button}>
               <Image
                 source={require("../assets/blood-drop.png")}

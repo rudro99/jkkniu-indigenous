@@ -3,8 +3,10 @@ import React from "react";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { DrawerItemList } from "@react-navigation/drawer";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useLogin } from "../Components/LoginProvider";
 
 export default function DrawerNavigation(props) {
+  const { setisLoggedin } = useLogin();
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -35,7 +37,11 @@ export default function DrawerNavigation(props) {
         </View>
       </DrawerContentScrollView>
       <View style={{ padding: 20, borderWidth: 1, borderTopColor: "#ccc" }}>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity
+          onPress={() => {
+            setisLoggedin(false);
+          }}
+        >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Image
               source={require("../assets/log-out.png")}

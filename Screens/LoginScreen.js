@@ -1,10 +1,17 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@rneui/base";
 import { Input } from "@rneui/base";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useLogin } from "../Components/LoginProvider";
+
 const LoginScreen = ({ navigation }) => {
+  const { setisLoggedin } = useLogin();
+  const { setcurrentuser } = useLogin();
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -12,11 +19,15 @@ const LoginScreen = ({ navigation }) => {
       </View>
       <View style={styles.footer}>
         <View style={styles.login}>
-          <Text style={styles.label}>User ID/Roll No:</Text>
+          <Text style={styles.label}>Email:</Text>
           <Input
-            placeholder="User ID"
+            placeholder="Email"
             leftIcon={<AntDesign name="user" size={24} color="black" />}
+            onChangeText={(input) => {
+              setemail(input);
+            }}
           />
+
           <Text style={styles.label}>Password:</Text>
           <Input
             placeholder="Password"
@@ -28,12 +39,26 @@ const LoginScreen = ({ navigation }) => {
                 color="black"
               />
             }
+            onChangeText={(input) => {
+              setpassword(input);
+            }}
           />
+
           <Button
             title="Login"
             size="lg"
             color={"#009387"}
-            onPress={() => navigation.navigate("Sign Up")}
+            onPress={() => {
+              const auth = getAuth();
+              signInWithEmailAndPassword(auth, email, password)
+                .then((userCreds) => {
+                  setcurrentuser(userCreds);
+                  setisLoggedin(true);
+                })
+                .catch((error) => {
+                  alert(error);
+                });
+            }}
           ></Button>
           <View style={styles.button}>
             <Button
