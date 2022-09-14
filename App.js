@@ -1,5 +1,3 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
@@ -17,21 +15,42 @@ import DrawerNavigation from "./Screens/DrawerNavigation";
 import AboutUs from "./Screens/AboutUs";
 import Developer from "./Screens/Developer";
 import Profile from "./Screens/Profile";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
 import { Image } from "@rneui/base";
-const HomeStackScreen = () => {
-  return (
-    <mystack.Navigator>
-      <mystack.Screen name="Home" component={HomeScreen}></mystack.Screen>
-      <mystack.Screen name="Job" component={JobScreen}></mystack.Screen>
-      <mystack.Screen
-        name="Student"
-        component={StudentsScreen}
-      ></mystack.Screen>
-      <mystack.Screen name="Blood" component={Bloodscreen}></mystack.Screen>
-      <mystack.Screen></mystack.Screen>
-    </mystack.Navigator>
-  );
+import LoginProvider, { useLogin } from "./Components/LoginProvider";
+import { getFirestore } from "firebase/firestore";
+const firebaseConfig = {
+  apiKey: "AIzaSyBl61fFzcbFnrsiRG5UP6Sv-6s74xCf8JM",
+  authDomain: "jkkniu-indigenous.firebaseapp.com",
+  projectId: "jkkniu-indigenous",
+  storageBucket: "jkkniu-indigenous.appspot.com",
+  messagingSenderId: "457106208893",
+  appId: "1:457106208893:web:078e55b98cebdcd48bd914",
 };
+
+const app = firebase.initializeApp(firebaseConfig);
+
+export const db = getFirestore(app);
+// const HomeStackScreen = () => {
+//   return (
+//     <mystack.Navigator>
+//       <mystack.Screen
+//         name="Root"
+//         component={}
+//         options={{ headerShown: false }}
+//       ></mystack.Screen>
+//       <mystack.Screen name="Home" component={HomeScreen}></mystack.Screen>
+//       <mystack.Screen
+//         name="Student"
+//         component={StudentsScreen}
+//       ></mystack.Screen>
+//       <mystack.Screen name="Blood" component={Bloodscreen}></mystack.Screen>
+//       <mystack.Screen></mystack.Screen>
+//     </mystack.Navigator>
+//   );
+// };
 const DrawerScreen = () => {
   return (
     <mydrawer.Navigator
@@ -150,13 +169,16 @@ const AuthStackScreen = () => {
     </myswitch.Navigator>
   );
 };
+const MNavigator = () => {
+  const { isLoggedin } = useLogin();
+  return isLoggedin ? <DrawerScreen /> : <AuthStackScreen />;
+};
 export default function App() {
   return (
-    <NavigationContainer>
-      {/* <AuthStackScreen></AuthStackScreen> */}
-      {/* <HomeStackScreen /> */}
-      {/* <HomeScreen></HomeScreen> */}
-      <DrawerScreen />
-    </NavigationContainer>
+    <LoginProvider>
+      <NavigationContainer>
+        <MNavigator />
+      </NavigationContainer>
+    </LoginProvider>
   );
 }
